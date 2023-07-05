@@ -18,17 +18,46 @@ public class MissingPositiveEntry
         // size() vs. length()
         // length() entails a constant value
         // size() can change.
-        A.add(2);
-        A.add(4);
-        A.add(3);
-        A.add(6);
-        A.add(5);
+        A.add(20);
+        A.add(40);
+        A.add(30);
+        A.add(60);
+        A.add(50);
 
-        for (int i = 0; i < A.size(); ++i)
+        int temp = 0;
+
+        int sizeOf = A.size();
+
+        int pivot = sizeOf / 2;
+
+        // Insertion sort.
+        for (int i = 0; i < A.size() ; ++i) // i represents the initial element for comparison
         {
-            // Consider the case for int "2" where no duplicates exist in the collection.
-            // 0 is less than 2; 2 is less than or equal to the list's size; the last element
-            // does not equal the 2 in question.
+            for (int j = 0; j < A.size(); ++j)
+            {
+                if (A.get(i) > A.get(j)) // This compares the values, not the indices.
+                {
+                    System.out.printf("J is: %d%n", j); // Probably prints the index, not the value
+                    System.out.printf("The value for j constitutes: %d%n", A.get(j)); // Prints the value, not the index
+                    Integer e = A.get(j);
+                    A.set(i,A.get(j));
+                    A.set(j,e);
+                }
+            }
+        }
+
+        for (int i : A)
+        {
+            System.out.printf("Sorted values: %d%n", i);
+        }
+        return 0;
+    }
+
+
+        /*for (int i = 0; i < A.size(); ++i)
+        {
+            System.out.printf("The list's elements: %d%n", A.get(i));
+
             while (0 < A.get(i) && A.get(i) <= A.size() && !A.get(A.get(i) - 1).equals(A.get(i)))
             {
                 // Therefore, the program swaps 2 with the last element, 5.
@@ -36,11 +65,8 @@ public class MissingPositiveEntry
                 System.out.printf("An integer %d%n",  A.get(i));
             }
         }
-        // IntStream performs computations on series of integers.
-        // range() returns a sequential, ordered IntStream by an increment of one.
-        // Start at 0, exclude the beginning, and if not, find the first.
 
-        return IntStream.range(0, A.size()).filter(i -> A.get(i) != i + 1).findFirst().orElse(A.size()) + 1;
-    }
+        return IntStream.range(0, A.size()).filter(i -> A.get(i) != i + 1).findFirst().orElse(A.size()) + 1;*/
+
 
 }
