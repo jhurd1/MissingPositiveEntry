@@ -45,7 +45,7 @@ public class MissingPositiveEntry
                 System.out.printf("The value for j constitutes: %d%n%n", A.get(j)); // Prints the value, not the index
                 System.out.printf("Comparisons: %d%n%n", count);
 
-                if (A.get(i) > A.get(j)) // This compares the values, not the indices.
+                if (A.get(i) < A.get(j)) // This compares the values, not the indices.
                 {
 
                     Integer e = A.get(j); // Proves necessary probably for overcoming "cannot dereference" thrown on primitives.
@@ -56,6 +56,7 @@ public class MissingPositiveEntry
 
                     //A.set(j,e);
                     A.set(i,e);
+                    //A.set(e,i); // Throws exception.
                 }
             }
         }
