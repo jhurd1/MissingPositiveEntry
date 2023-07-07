@@ -30,18 +30,32 @@ public class MissingPositiveEntry
 
         int pivot = sizeOf / 2;
 
+        int count = 0; // The number of possible comparisons, which I think should be 25 (5 x 5).
+        // I should only need to make four comparisons, not 25.
+        // Is it possible to hold one number in memory for a comparison?
+        // Think on this for enhancing efficiency later.
+
         // Insertion sort.
         for (int i = 0; i < A.size() ; ++i) // i represents the initial element for comparison
         {
             for (int j = 0; j < A.size(); ++j)
             {
+                count++;
+                System.out.printf("The value for i constitutes: %d%n%n", A.get(i));
+                System.out.printf("The value for j constitutes: %d%n%n", A.get(j)); // Prints the value, not the index
+                System.out.printf("Comparisons: %d%n%n", count);
+
                 if (A.get(i) > A.get(j)) // This compares the values, not the indices.
                 {
-                    System.out.printf("J is: %d%n", j); // Probably prints the index, not the value
-                    System.out.printf("The value for j constitutes: %d%n", A.get(j)); // Prints the value, not the index
-                    Integer e = A.get(j);
-                    A.set(i,A.get(j));
-                    A.set(j,e);
+
+                    Integer e = A.get(j); // Proves necessary probably for overcoming "cannot dereference" thrown on primitives.
+                    //A.set(i,A.get(j)); // Example: 40 swaps with 30, leaving 20, 30, 40 as the orderof 0,1,2.
+                    //A.set(temp,A.get(i)); // Keeps from setting all to the lowest value. Temp holds 40.
+                    A.set(j,A.get(i)); // Previous element swaps to lower value to put it in order. i becomes 30.
+                    //A.set(temp,A.get(j)); // Swaps higher value back into slot 2. 30 becomes 40.
+
+                    //A.set(j,e);
+                    A.set(i,e);
                 }
             }
         }
