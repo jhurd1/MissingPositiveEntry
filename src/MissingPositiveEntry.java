@@ -13,7 +13,16 @@ import java.util.stream.IntStream;
 public class MissingPositiveEntry
 {
 
-    public static List<Integer> mpeMethod(List<Integer> A)
+    /*
+    MPEMETHOD
+    sorts the collection
+    preparatory to
+    determining the average
+    difference between each element,
+    which proves necessary for inserting
+    missing elements back to 0.
+     */
+    public List<Integer> mpeMethod(List<Integer> A)
     {
         A.add(20);
         A.add(40);
@@ -47,6 +56,10 @@ public class MissingPositiveEntry
         {
             System.out.printf("Sorted values: %d%n", i);
         }
+
+        DecipherMissing dm = new DecipherMissing();
+        dm.averageDiffs(A);
+
         return A;
     }
 }

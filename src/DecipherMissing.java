@@ -1,82 +1,105 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.lang.Integer;
 
 public class DecipherMissing
 {
-    List<Integer> mainList = new ArrayList<Integer>();
     List<Integer> subList = new ArrayList<Integer>();
     int averageDiff = 0;
+    int temp = 0;
+    int total = 0;
 
-    public static int storeDiffs()
+    /*
+    GETNEXT
+    Helps AverageDiffs find
+    the average difference
+    between each element
+    by handing it the next element
+    in the sorted arrayList.
+     */
+    public int getNext(int nextInt, List<Integer> subList)
     {
-        // Get the average interval between two values.
-        MissingPositiveEntry mpe = new MissingPositiveEntry();
-        mpe.mpeMethod(List<Integer> mainList);
-
-        for (auto i : mainList)
+        if (nextInt < 0 || nextInt + 1 == subList.size())
         {
-            int j = i + 1;
-            if (mainList.get(i) == 0)
-            {
-                System.out.printf("ArrayList possesses a value of 0, see: %d%n", i);
-                subList.add(mainList.get(i));
-            } else if (mainList.get(i) != 0)
-            {
-                int sub = mainList.get(i) - mainList.get(i + 1);
-                System.out.printf("Difference is: %d%n", sub);
-                subList.add(sub);
-            }
+            return 0;
         }
-
-        return subList;
+        return subList.get(nextInt + 1);
     }
 
-    public static int averageDiffs(List<Integer> subList)
+    /*
+    AVERAGEDIFFS
+    Gleans the average difference
+    between each element to help
+    prepare for adding missing elements
+    between the lowest value one and 0.
+     */
+    public int averageDiffs(List<Integer> subList)
     {
-        int total = 0;
-
-        for (auto j : subList)
+        int sum = 0;
+        int lastTempValue = 0;
+        for (int j = 0; j < subList.size(); ++j)
         {
             total++;
-            int addEmUP;
-            addEmUP += subList.get(j);
-            averageDiff = addEmUP/total;
+            int lvalue = subList.get(j);
+            int next = getNext(j, subList);
+            if ((next > lvalue) && (next != 0))
+            {
+                temp = next - lvalue;
+                lastTempValue = temp;
+            } else if ((next < lvalue) && (next != 0))
+            {
+                temp = lvalue - next;
+                lastTempValue = temp;
+            } else
+            {
+                temp = lastTempValue;
+            }
+            sum += temp;
+            System.out.printf("temp: %d%n", temp);
         }
-
+        averageDiff = sum/total;
+        System.out.printf("averageDiff: %d%n", averageDiff);
+        generateMissing(averageDiff, subList);
         return averageDiff;
     }
 
-    public static int generateMissing(int averageDiff)
+    /*
+    GENERATEMISSING
+    generates the missing elements
+    back to 0, finalizing this
+    original intent of this program.
+     */
+    public int generateMissing(int averageDiff, List<Integer> subList)
     {
         try
         {
-            for (auto k : mainList)
+            for (int k = 0; k < subList.size(); ++k)
             {
-                if (k != mainList.size() - 1) // As long as we haven't reached the end, continue.
+                if (k != subList.size() - 1) // As long as we haven't reached the end, continue.
                 {
-                    int tempDiff = mainList.get(k) - (mainList.get(k + 1)); // Store the diff between values.
-
+                    int tempDiff = subList.get(k) - (subList.get(k + 1)); // Store the diff between values.
+                    System.out.printf("Difference between lvalue and rvalue: %d%n", tempDiff);
                     if (tempDiff > averageDiff) // If that diff proves greater than the average, continue.
                     {
                         if (tempDiff < 0)
                         {
-                            mainList.add(tempDiff - mainList.get(k)); // Add a new int short of the current by the tempDiff value.
+                            subList.add(tempDiff - subList.get(k)); // Add a new int short of the current by the tempDiff value.
                         } else
                         {
                             String failed = "mainList cannot contain negative values.";
                             System.out.printf("%s%n", failed);
-                            return generateMissing(averageDiff);
+                            return generateMissing(averageDiff, subList);
                         }
                     } else if (tempDiff < averageDiff) // Handle the case when it proves less than average.
                     {
-                        mainList.add(tempDiff + mainList.get(k));
-                    } else if (!mainList.contains(0))
+                        subList.add(tempDiff + subList.get(k));
+                    } else if (!subList.contains(0))
                     {
-                        mainList.add(0); // Handle the case where 0 needs to be added.
+                        subList.add(0); // Handle the case where 0 needs to be added.
                     }
                 }
-
+                System.out.printf("The new list contains: %d%n", k);
             }
         } catch (Exception e)
         {
