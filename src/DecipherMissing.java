@@ -5,6 +5,7 @@ import java.lang.Integer;
 
 public class DecipherMissing
 {
+    // DATA MEMBERS
     List<Integer> subList = new ArrayList<Integer>();
 
     int averageDiff = 0;
@@ -14,67 +15,12 @@ public class DecipherMissing
     int lastTempValue = 0;
     int next = 0;
 
-    public int getAverageDiff()
+    // ACCESSORS
+
+    public List<Integer> getSubList()
     {
-        return averageDiff;
+        return subList;
     }
-
-    public int getTemp()
-    {
-        return temp;
-    }
-
-    public int getTotal()
-    {
-        return total;
-    }
-
-    public int getLvalue()
-    {
-        return lvalue;
-    }
-
-    public int getLastTempValue()
-    {
-        return lastTempValue;
-    }
-
-    public int getNext()
-    {
-        return next;
-    }
-
-    public void setAverageDiff(int averageDiff)
-    {
-        this.averageDiff = averageDiff;
-    }
-
-    public void setTemp(int temp)
-    {
-        this.temp = temp;
-    }
-
-    public void setTotal(int total)
-    {
-        this.total = total;
-    }
-
-    public void setLvalue(int lvalue)
-    {
-        this.lvalue = lvalue;
-    }
-
-    public void setLastTempValue(int lastTempValue)
-    {
-        this.lastTempValue = lastTempValue;
-    }
-
-    public void setNext(int next)
-    {
-        this.next = next;
-    }
-
-
 
     /*
     GETNEXT
@@ -93,6 +39,8 @@ public class DecipherMissing
         return subList.get(nextInt + 1);
     }
 
+    // MUTATORS
+
     /*
     SETTEMP
     prevents the duplicate
@@ -100,15 +48,16 @@ public class DecipherMissing
     in averageDiffs and
     generateMissing.
      */
-    public int setTemp(int temp, int lvalue)
+    public int setTemp(int lvalue, List<Integer> subList)
     {
-        if ((getNext() > lvalue) && (getNext() != 0))
+        next = getNext(lvalue, subList);
+        if ((next > subList.get(lvalue)) && (next != 0))
         {
-            temp = next - lvalue;
+            temp = next - subList.get(lvalue);
             lastTempValue = temp;
-        } else if ((next < lvalue) && (next != 0))
+        } else if ((next < subList.get(lvalue)) && (next != 0))
         {
-            temp = lvalue - next;
+            temp = subList.get(lvalue) - next;
             lastTempValue = temp;
         } else
         {
@@ -131,11 +80,9 @@ public class DecipherMissing
         for (int j = 0; j < subList.size(); ++j)
         {
             total++;
-            lvalue = subList.get(j);
-            //next = getNext(j, subList);
-            setNext(getNext(j, subList));
-            setTemp(temp, lvalue);
-            //lastTempValue = temp;
+            //lvalue = subList.get(j);
+            lvalue = j;
+            setTemp(lvalue, subList);
             sum += lastTempValue;
         }
         averageDiff = sum/total;
@@ -147,7 +94,7 @@ public class DecipherMissing
     /*
     GENERATEMISSING
     generates the missing elements
-    back to 0, finalizing this
+    back to 0, finalizing the
     original intent of this program.
      */
     public int generateMissing(int averageDiff, List<Integer> subList)
@@ -158,9 +105,7 @@ public class DecipherMissing
             {
                 if (k != subList.size() - 1) // As long as we haven't reached the end, continue.
                 {
-                    //int tempDiff = subList.get(k) - (subList.get(k + 1)); // Store the diff between values.
-                    int tempDiff = setTemp(k, subList.get(k));
-                    // call setTemp()
+                    int tempDiff = setTemp(k, subList);
 
                     System.out.printf("Difference between lvalue and rvalue: %d%n", tempDiff);
                     if (tempDiff > averageDiff) // If that diff proves greater than the average, continue.
@@ -170,7 +115,7 @@ public class DecipherMissing
                             subList.add(tempDiff - subList.get(k)); // Add a new int short of the current by the tempDiff value.
                         } else
                         {
-                            String failed = "mainList cannot contain negative values.";
+                            String failed = "This collection cannot contain negative values. Trying again.";
                             System.out.printf("%s%n", failed);
                             return generateMissing(averageDiff, subList);
                         }
@@ -180,18 +125,35 @@ public class DecipherMissing
                     } else if (!subList.contains(0))
                     {
                         subList.add(0); // Handle the case where 0 needs to be added.
+                        int i = 0; // Return to index 0.
+                        int m = subList.get(i) - 0; // Total difference from 0 to lowest.
+                        int n = (m/averageDiff) - 1; // Divide this the averageDiff to get how many figures to enter; missing numbers.
+                        // Subtracting one should furnish the corrrect # of missing integers.
+                        int newDiff = 1;
+                        if (n >= 1) // Stop if n comprises a 0 or less.
+                        {
+                            while (n != 0 && newDiff != 0) // Stop when n becomes 0.
+                            {
+                                n--; // Keep count.
+                                newDiff = subList.get(i) - tempDiff;
+                                subList.add(newDiff); // This adds the same thing each time. It shouldn't.
+                                tempDiff = newDiff;
+                            }
+                        }
                     }
                 }
-            }
-            for (int l : subList)
-            {
-                System.out.printf("The new list contains: %d%n", l);
             }
         } catch (Exception e)
         {
             String error = "Generating missing integers reached failure.";
             System.out.printf("%s%n", error);
             return 0;
+        }
+        MissingPositiveEntry mpe = new MissingPositiveEntry();
+        //mpe.mpeMethod(subList);
+        for (int l : subList)
+        {
+            System.out.printf("The new list contains: %d%n", l);
         }
         return 0;
     }
