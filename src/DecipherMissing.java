@@ -6,9 +6,75 @@ import java.lang.Integer;
 public class DecipherMissing
 {
     List<Integer> subList = new ArrayList<Integer>();
+
     int averageDiff = 0;
     int temp = 0;
     int total = 0;
+    int lvalue = 0;
+    int lastTempValue = 0;
+    int next = 0;
+
+    public int getAverageDiff()
+    {
+        return averageDiff;
+    }
+
+    public int getTemp()
+    {
+        return temp;
+    }
+
+    public int getTotal()
+    {
+        return total;
+    }
+
+    public int getLvalue()
+    {
+        return lvalue;
+    }
+
+    public int getLastTempValue()
+    {
+        return lastTempValue;
+    }
+
+    public int getNext()
+    {
+        return next;
+    }
+
+    public void setAverageDiff(int averageDiff)
+    {
+        this.averageDiff = averageDiff;
+    }
+
+    public void setTemp(int temp)
+    {
+        this.temp = temp;
+    }
+
+    public void setTotal(int total)
+    {
+        this.total = total;
+    }
+
+    public void setLvalue(int lvalue)
+    {
+        this.lvalue = lvalue;
+    }
+
+    public void setLastTempValue(int lastTempValue)
+    {
+        this.lastTempValue = lastTempValue;
+    }
+
+    public void setNext(int next)
+    {
+        this.next = next;
+    }
+
+
 
     /*
     GETNEXT
@@ -28,6 +94,31 @@ public class DecipherMissing
     }
 
     /*
+    SETTEMP
+    prevents the duplicate
+    of similar logic
+    in averageDiffs and
+    generateMissing.
+     */
+    public int setTemp(int temp, int lvalue)
+    {
+        if ((getNext() > lvalue) && (getNext() != 0))
+        {
+            temp = next - lvalue;
+            lastTempValue = temp;
+        } else if ((next < lvalue) && (next != 0))
+        {
+            temp = lvalue - next;
+            lastTempValue = temp;
+        } else
+        {
+            temp = lastTempValue;
+        }
+        System.out.printf("temp: %d%n", temp);
+        return temp;
+    }
+
+    /*
     AVERAGEDIFFS
     Gleans the average difference
     between each element to help
@@ -37,26 +128,15 @@ public class DecipherMissing
     public int averageDiffs(List<Integer> subList)
     {
         int sum = 0;
-        int lastTempValue = 0;
         for (int j = 0; j < subList.size(); ++j)
         {
             total++;
-            int lvalue = subList.get(j);
-            int next = getNext(j, subList);
-            if ((next > lvalue) && (next != 0))
-            {
-                temp = next - lvalue;
-                lastTempValue = temp;
-            } else if ((next < lvalue) && (next != 0))
-            {
-                temp = lvalue - next;
-                lastTempValue = temp;
-            } else
-            {
-                temp = lastTempValue;
-            }
-            sum += temp;
-            System.out.printf("temp: %d%n", temp);
+            lvalue = subList.get(j);
+            //next = getNext(j, subList);
+            setNext(getNext(j, subList));
+            setTemp(temp, lvalue);
+            //lastTempValue = temp;
+            sum += lastTempValue;
         }
         averageDiff = sum/total;
         System.out.printf("averageDiff: %d%n", averageDiff);
@@ -78,7 +158,10 @@ public class DecipherMissing
             {
                 if (k != subList.size() - 1) // As long as we haven't reached the end, continue.
                 {
-                    int tempDiff = subList.get(k) - (subList.get(k + 1)); // Store the diff between values.
+                    //int tempDiff = subList.get(k) - (subList.get(k + 1)); // Store the diff between values.
+                    int tempDiff = setTemp(k, subList.get(k));
+                    // call setTemp()
+
                     System.out.printf("Difference between lvalue and rvalue: %d%n", tempDiff);
                     if (tempDiff > averageDiff) // If that diff proves greater than the average, continue.
                     {
@@ -99,7 +182,10 @@ public class DecipherMissing
                         subList.add(0); // Handle the case where 0 needs to be added.
                     }
                 }
-                System.out.printf("The new list contains: %d%n", k);
+            }
+            for (int l : subList)
+            {
+                System.out.printf("The new list contains: %d%n", l);
             }
         } catch (Exception e)
         {
