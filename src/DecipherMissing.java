@@ -85,7 +85,7 @@ public class DecipherMissing
             setTemp(lvalue, subList);
             sum += lastTempValue;
         }
-        averageDiff = sum/total;
+        averageDiff = sum / total;
         System.out.printf("averageDiff: %d%n", averageDiff);
         generateMissing(averageDiff, subList);
         return averageDiff;
@@ -127,8 +127,7 @@ public class DecipherMissing
                         subList.add(0); // Handle the case where 0 needs to be added.
                         int i = 0; // Return to index 0.
                         int m = subList.get(i) - 0; // Total difference from 0 to lowest.
-                        int n = (m/averageDiff) - 1; // Divide this the averageDiff to get how many figures to enter; missing numbers.
-                        // Subtracting one should furnish the corrrect # of missing integers.
+                        int n = (m / averageDiff) - 1;
                         int newDiff = 1;
                         if (n >= 1) // Stop if n comprises a 0 or less.
                         {
@@ -136,7 +135,7 @@ public class DecipherMissing
                             {
                                 n--; // Keep count.
                                 newDiff = subList.get(i) - tempDiff;
-                                subList.add(newDiff); // This adds the same thing each time. It shouldn't.
+                                subList.add(newDiff);
                                 tempDiff = newDiff;
                             }
                         }
@@ -150,7 +149,7 @@ public class DecipherMissing
             return 0;
         }
         MissingPositiveEntry mpe = new MissingPositiveEntry();
-        //mpe.mpeMethod(subList);
+        mpe.mpeMethod(subList);
         for (int l : subList)
         {
             System.out.printf("The new list contains: %d%n", l);

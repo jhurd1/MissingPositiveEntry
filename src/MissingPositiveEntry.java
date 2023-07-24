@@ -7,8 +7,6 @@ Find the largest integer first.
 
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 public class MissingPositiveEntry
 {
@@ -24,11 +22,20 @@ public class MissingPositiveEntry
      */
     public List<Integer> mpeMethod(List<Integer> A)
     {
-        A.add(20);
-        A.add(40);
-        A.add(30);
-        A.add(60);
-        A.add(50);
+
+        boolean callAgain = true;
+
+        if (A.isEmpty())
+        {
+            A.add(20);
+            A.add(40);
+            A.add(30);
+            A.add(60);
+            A.add(50);
+        } else
+        {
+            callAgain = false;
+        }
 
         int count = 0;
 
@@ -57,8 +64,11 @@ public class MissingPositiveEntry
             System.out.printf("Sorted values: %d%n", i);
         }
 
-        DecipherMissing dm = new DecipherMissing();
-        dm.averageDiffs(A);
+        if (callAgain)
+        {
+            DecipherMissing dm = new DecipherMissing();
+            dm.averageDiffs(A);
+        }
 
         return A;
     }
